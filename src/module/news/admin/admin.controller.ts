@@ -8,6 +8,11 @@ export class AdminController {
 
   @Post()
   async createNews(@Body() createNewsDto: CreateNewsDto) {
-    return await this.adminService.createNews(createNewsDto);
+    const created = await this.adminService.createNews(createNewsDto);
+    return {
+      message: 'News created successfully.',
+      data: created,
+    };
   }
+
 }
