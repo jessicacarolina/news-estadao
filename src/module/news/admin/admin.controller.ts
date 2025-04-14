@@ -1,6 +1,7 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Put, Param, ParseIntPipe } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateNewsDto } from '../dto/create-news.dto';
+import { UpdateNewsDto } from '../dto/update-news.dto';
 
 @Controller('admin/news')
 export class AdminController {
@@ -12,6 +13,18 @@ export class AdminController {
     return {
       message: 'News created successfully.',
       data: created,
+    };
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateNewsDto: UpdateNewsDto,
+  ) {
+    const updated = await this.adminService.updateNews(id, updateNewsDto);
+    return {
+      message: 'News updated successfully.',
+      data: updated,
     };
   }
 

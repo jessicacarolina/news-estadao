@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminService } from './admin.service';
 import { PrismaService } from '../../../shared/prisma/prisma.service';
-import { HttpException } from '@nestjs/common';
+import { NotFoundException, BadRequestException, HttpException } from '@nestjs/common';
 import type { CreateNewsDto } from '../dto/create-news.dto';
 
 describe('AdminService', () => {
@@ -74,6 +74,54 @@ describe('AdminService', () => {
       mockPrismaService.news.create.mockRejectedValue(new HttpException('Error creating news. Please try again.', 500));
       
       await expect(service.createNews(createNewsDtoMock())).rejects.toThrow(HttpException);
+    });
+  });
+
+  describe('updateNews', () => {
+    it('should update news successfully', async () => {
+      const id = 1;
+      const updateNewsDto = { title: 'Updated News' };
+      const existingNews = { id, title: 'Old News' };
+      const updatedNews = { id, ...updateNewsDto };
+
+      mockPrismaService.news.findUnique.mockResolvedValue(existingNews);
+      mockPrismaService.news.update.mockResolvedValue(updatedNews);
+
+      const result = await service.updateNews(id, updateNewsDto);
+      expect(result).toEqual(updatedNews);
+      expect(mockPrismaService.news.findUnique).toHaveBeenCalledWith({ where: { id } });
+      expect(mockPrismaService.news.update).toHaveBeenCalledWith({
+        where: { id },
+        data: updateNewsDto,
+      });
+    });
+
+    it('should throw NotFoundException if news does not exist', async () => {
+      const id = 1;
+      const updateNewsDto = { title: 'Updated News' };
+
+      mockPrismaService.news.findUnique.mockResolvedValue(null);
+
+      await expect(service.updateNews(id, updateNewsDto)).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw BadRequestException if no data is provided', async () => {
+      const id = 1;
+      const updateNewsDto = {};
+
+      mockPrismaService.news.findUnique.mockResolvedValue({ id, title: 'Old News' });
+      mockPrismaService.news.create.mockRejectedValue(new HttpException('No data provided to update.', 400));
+      await expect(service.updateNews(id, updateNewsDto)).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw an error if update fails', async () => {
+      const id = 1;
+      const updateNewsDto = { title: 'Updated News' };
+
+      mockPrismaService.news.findUnique.mockResolvedValue({ id, title: 'Old News' });
+      mockPrismaService.news.update.mockRejectedValue(new HttpException('Error updating news. Please try again.', 500));
+
+      await expect(service.updateNews(id, updateNewsDto)).rejects.toThrow(HttpException);
     });
   });
 

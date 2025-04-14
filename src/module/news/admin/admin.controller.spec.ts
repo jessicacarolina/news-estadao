@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 import { CreateNewsDto } from '../dto/create-news.dto';
+import { UpdateNewsDto } from '../dto/update-news.dto';
 
 describe('AdminController', () => {
   let controller: AdminController;
@@ -63,9 +64,55 @@ describe('AdminController', () => {
         await controller.createNews(invalidDto as any);
       } catch (error) {
         expect(error.status).toBe(400);
-        expect(error.response.message).toContain('title should not be empty');
+        expect(error.response.message).toContain('The following fields are required: title');
       }
     });
+  });
+
+  describe('update', () => {
+    it('should return success message and data', async () => {
+      const id = 1;
+      const dto: UpdateNewsDto = { title: 'Updated title', content: 'Updated content' };
+      const updated = { id, ...dto };
+
+      mockAdminService.updateNews.mockResolvedValue(updated);
+
+      const result = await controller.update(id, dto);
+
+      expect(result).toEqual({
+        message: 'News updated successfully.',
+        data: updated,
+      });
+
+      expect(mockAdminService.updateNews).toHaveBeenCalledWith(id, dto);
+    });
+
+    it('should return error if id does not exist', async () => {
+      const id = 999;
+      const dto: UpdateNewsDto = { title: 'Updated title', content: 'Updated content' };
+  
+      mockAdminService.updateNews.mockResolvedValue(null);
+  
+      try {
+        await controller.update(id, dto);
+      } catch (error) {
+        expect(error.status).toBe(404);
+        expect(error.response.message).toContain('News not found');
+      }
+    });
+  
+    it('should return error if no data is provided to update', async () => {
+      const id = 1;
+      const dto: UpdateNewsDto = {};
+  
+      try {
+        await controller.update(id, dto);
+      } catch (error) {
+        expect(error.status).toBe(400);
+        expect(error.response.message).toContain('No data provided to update');
+      }
+    });
+  
   });
 
 });
