@@ -125,4 +125,40 @@ describe('AdminService', () => {
     });
   });
 
+  describe('deleteNews', () => {
+    it('should delete news successfully', async () => {
+      const id = 1;
+      const existingNews = { id };
+      const deletedNews = { id, deletedAt: new Date() };
+
+      mockPrismaService.news.findUnique.mockResolvedValue(existingNews);
+      mockPrismaService.news.update.mockResolvedValue(deletedNews);
+
+      const result = await service.deleteNews(id);
+      expect(result).toEqual(deletedNews);
+      expect(mockPrismaService.news.findUnique).toHaveBeenCalledWith({ where: { id } });
+      expect(mockPrismaService.news.update).toHaveBeenCalledWith({
+        where: { id },
+        data: { deletedAt: expect.any(Date) },
+      });
+    });
+
+    it('should throw NotFoundException if news does not exist', async () => {
+      const id = 1;
+
+      mockPrismaService.news.findUnique.mockResolvedValue(null);
+
+      await expect(service.deleteNews(id)).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw an error if deletion fails', async () => {
+      const id = 1;
+      const existingNews = { id };
+
+      mockPrismaService.news.findUnique.mockResolvedValue(existingNews);
+      mockPrismaService.news.update.mockRejectedValue(new HttpException('News not found.', 404));
+
+      await expect(service.deleteNews(id)).rejects.toThrow(HttpException);
+    });
+  });
 });

@@ -38,4 +38,22 @@ export class AdminService {
     }
   }
 
+  async deleteNews(id: number) {
+    const exists = await this.prisma.news.findUnique({ where: { id } });
+    if (!exists) {
+      throw new NotFoundException('News not found.');
+    }
+  
+    try {
+      return this.prisma.news.update({
+        where: { id },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+    } catch (error) {
+      throw new BadRequestException('Error deleting news. Please try again.');
+    }
+  }
+
 }

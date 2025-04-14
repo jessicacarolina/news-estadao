@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Put, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Body, Put, Param, ParseIntPipe, Delete } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateNewsDto } from '../dto/create-news.dto';
 import { UpdateNewsDto } from '../dto/update-news.dto';
@@ -25,6 +25,15 @@ export class AdminController {
     return {
       message: 'News updated successfully.',
       data: updated,
+    };
+  }
+
+  @Delete(':id')
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    const deleted = await this.adminService.deleteNews(id);
+    return {
+      message: 'News deleted successfully.',
+      data: deleted,
     };
   }
 

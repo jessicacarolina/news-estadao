@@ -11,6 +11,7 @@ describe('AdminController', () => {
   const mockAdminService = {
     createNews: jest.fn(),
     updateNews: jest.fn(),
+    deleteNews: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -115,4 +116,33 @@ describe('AdminController', () => {
   
   });
 
+  describe('delete', () => {
+    it('should return success message when news is deleted', async () => {
+      const id = 1;
+      mockAdminService.deleteNews.mockResolvedValue({ id });
+      const result = await controller.delete(id);
+  
+      expect(result).toEqual({
+        message: 'News deleted successfully.',
+        data: { id },
+      });
+  
+      expect(mockAdminService.deleteNews).toHaveBeenCalledWith(id);
+    });
+  
+    it('should return error if id does not exist', async () => {
+      const id = 999;
+      mockAdminService.deleteNews.mockResolvedValue(null);
+  
+      try {
+        await controller.delete(id);
+      } catch (error) {
+        expect(error.status).toBe(404);
+        expect(error.response.message).toContain('News not found');
+      }
+  
+      expect(mockAdminService.deleteNews).toHaveBeenCalledWith(id);
+    });
+
+  });
 });
