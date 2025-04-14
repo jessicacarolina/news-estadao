@@ -24,16 +24,12 @@ Organiza os módulos por domínio (ex: `news`) e, dentro de cada um, por context
 src/
 ├── modules/
 │   └── news/
-│       ├── admin/               # Funcionalidades restritas à administração
-│       │   ├── controllers/     # Rotas protegidas para criar, editar, deletar notícias
-│       │   ├── services/        # Lógica de negócios do admin
-│       ├── public/              # Funcionalidades acessíveis ao público geral
-│       │   ├── controllers/     # Listagem de todas as notícias e visualização individual
-│       │   ├── services/        # Lógica de exibição pública
+│       ├── admin/               # Funcionalidades restritas à administração (controller + service)
+│       ├── public/              # Funcionalidades acessíveis ao público geral (controller + service)
 │       ├── dto/                 # Data Transfer Objects comuns
-│       ├── entities/            # Definições das entidades de dados
 │       └── news.module.ts       # Configuração do módulo de notícias
 ├── shared/                      # Componentes reutilizáveis (pipes, guards, etc.)
+│   └── prisma/                  # Serviço de acesso ao banco com Prisma
 ├── main.ts                      # Entry point da aplicação
 ```
 

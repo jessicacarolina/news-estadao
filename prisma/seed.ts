@@ -29,7 +29,7 @@ async function seedNews() {
         create: news,
       });
     }
-
+    await prisma.$executeRaw`SELECT setval(pg_get_serial_sequence('\"News\"', 'id'), 5, true);`;
     console.log('Table News populated successfully!');
   } catch (error) {
     console.error('Error when populating the News table:', error);
