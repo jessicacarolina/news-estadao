@@ -8,8 +8,16 @@ datasource db {
 }
 
 model News {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  createdAt DateTime @default(now())
+  id                  Int      @id @default(autoincrement())
+  title               String   @db.Text
+  subtitle            String   @db.Text
+  section             String   @db.VarChar(20)
+  url                 String
+  publicationDateTime DateTime
+  image               String
+  imageThumb          String
+  content             String   @db.Text
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  deletedAt           DateTime?
 }
