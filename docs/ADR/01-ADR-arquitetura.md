@@ -8,7 +8,7 @@ Construir um backend escalável para um sistema de notícias com:
 - Facilidade de manutenção e evolução da aplicação  
 - Persistência dos dados em um banco relacional confiável
 ---
-## *Decisão pelo Banco de Dados NestJS com Typescript*
+## *Decisão pelo Framework NestJS com Typescript*
 ### Por que NestJS?
 - Estrutura pronta para projetos em crescimento
 - Arquitetura baseada em módulos, ideal para separação de domínios
