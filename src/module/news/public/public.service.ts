@@ -9,7 +9,7 @@ export class PublicService {
     if (!Number.isInteger(page) || page < 1) {
       page = 1;
     }
-    const pageSize = 20;
+    const pageSize = 6;
     const skip = (page - 1) * pageSize;
 
     const news = await this.prisma.news.findMany({
@@ -19,7 +19,7 @@ export class PublicService {
         deletedAt: null,
       },
       orderBy: {
-        publicationDateTime: 'desc',
+        updatedAt: 'desc',
       },
       select: {
         id: true,

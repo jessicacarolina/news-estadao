@@ -81,7 +81,7 @@ describe('PublicService', () => {
       expect(prisma.news.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           skip: 0,
-          take: 20,
+          take: 6,
         }),
       );
     });
