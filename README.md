@@ -1,98 +1,187 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# News API - Backend com NestJS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Este é o backend de um sistema para gerenciamento e listagem de notícias, desenvolvido com **NestJS** e **TypeScript**, com persistência em **PostgreSQL** via **Prisma ORM**. O projeto foi estruturado para ser **escalável**, de **baixo acoplamento** e **fácil de manutenção e evolução**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Documentação Técnica
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+As decisões sobre arquitetura, organização do projeto e tecnologias utilizadas estão descritas em uma [ADR (Architecture Decision Record)](./docs/ADR/01-ADR-arquitetura.md) disponível no repositório.
 
-## Project setup
+---
 
-```bash
-$ npm install
+## Funcionalidades
+
+- Separação entre rotas **públicas** e **administrativas**
+- Arquitetura **modular** por domínio
+- Pronto para receber **autenticação** via middleware
+- Boas práticas integradas (validação, testes, pipes)
+- Persistência de dados com **PostgreSQL** e **Prisma**
+- Ambiente padronizado com **Docker**
+
+---
+
+## Como rodar localmente
+
+### Pré-requisitos
+
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+---
+### Passo a passo
+
+#### 1. **Clone o repositório**
+
+- via SSH
+```bash 
+git clone git@github.com:jessicacarolina/news-estadao-api.git
+cd news-estadao-api
+```
+- Ou via HTTPS
+```bash 
+git clone https://github.com/jessicacarolina/news-estadao-api.git
+cd news-estadao-api
 ```
 
-## Compile and run the project
+#### 2. **Configure as variáveis de ambiente**
+
+Renomeie o arquivo `.env.example` para `.env`:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cp .env.example .env
 ```
 
-## Run tests
+2.1. Preencha as variáveis de ambiente com os valores corretos.  
+   Abaixo, uma breve explicação de cada uma:
+
+| Variável           | Descrição                                                                 |
+|--------------------|---------------------------------------------------------------------------|
+| `DATABASE_URL`      | URL de conexão com o banco PostgreSQL usada pela aplicação                |
+| `POSTGRES_USER`     | Usuário do banco de dados PostgreSQL (usado pelo container Docker)        |
+| `POSTGRES_PASSWORD` | Senha do banco de dados PostgreSQL (usado pelo container Docker)          |
+| `POSTGRES_DB`       | Nome do banco de dados PostgreSQL (usado pelo container Docker)           |
+
+---
+
+#### 3. **Suba os containers**
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker compose up --build
 ```
 
-## Deployment
+> Isso iniciará:
+> - o backend NestJS (porta `3000`)
+> - o banco PostgreSQL (porta `5432`)
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Aguarde alguns segundos até o banco estar pronto.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
+
+#### 4. **Acesse o container do app**
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+docker exec -it app sh
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Agora dentro do container, execute os próximos passos:
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+#### 5. **Aplique as migrations existentes**
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+npx prisma migrate dev
+```
 
-## Support
+> Isso criará as tabelas no banco conforme o schema Prisma.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+#### 6. **Rode o seed para popular o banco**
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+npx prisma db seed
+```
 
-## License
+> Isso vai inserir dados iniciais, como notícias de exemplo.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+#### 7. **Acesse a aplicação**
+
+- API pública: [http://localhost:3000/news](http://localhost:3000/news)
+
+---
+
+## Testes
+
+A aplicação já está configurada com testes utilizando o framework de testes do próprio NestJS.
+
+### Executar os testes
+
+```bash
+npm run test
+```
+
+Os testes automatizados cobrem os principais fluxos da aplicação. Abaixo está um resumo da cobertura nos módulos `news/admin` e `news/public`:
+
+```
+-------------------------------|---------|----------|---------|---------|-------------------
+File                           | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------------------|---------|----------|---------|---------|-------------------
+src/module/news/admin          |   92.68 |      100 |     100 |   91.89 |                   
+  admin.controller.ts          |     100 |      100 |     100 |     100 |                   
+  admin.service.ts             |    87.5 |      100 |     100 |   86.36 | 19,37,55          
+src/module/news/public         |   96.29 |      100 |     100 |   95.65 |                   
+  public.controller.ts         |     100 |      100 |     100 |     100 |                   
+  public.service.ts            |   94.11 |      100 |     100 |   93.33 | 61                  
+-------------------------------|---------|----------|---------|---------|-------------------
+```
+
+> Testes executados com `npm run test:cov`. A cobertura será expandida conforme a aplicação evolui.
+
+---
+
+## Estrutura do Projeto
+
+```bash
+src/
+├── modules/
+│   └── news/
+│       ├── admin/       # Rotas e serviços administrativos
+│       ├── public/      # Rotas e serviços públicos
+│       ├── dto/         # Data Transfer Objects
+│       └── news.module.ts
+├── shared/
+│   └── prisma/          # Serviço centralizado de acesso ao banco
+├── main.ts              # Ponto de entrada da aplicação
+```
+
+---
+
+## Arquitetura
+
+```mermaid
+graph TD
+  A[Admin Controller] --> B[Admin Service]
+  AA[Public Controller] --> BB[Public Service]
+  B --> C[Prisma Service]
+  BB --> C
+  C --> D[(PostgreSQL)]
+```
+
+---
+
+## Tecnologias Utilizadas
+
+- [NestJS](https://nestjs.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Prisma ORM](https://www.prisma.io/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+---
+
+#### Feito com ❤️ por [Jéssica Santos](https://github.com/jessicacarolina)

@@ -12,7 +12,7 @@ Construir um backend escalável para um sistema de notícias com:
 ### Por que NestJS?
 - Estrutura pronta para projetos em crescimento
 - Arquitetura baseada em módulos, ideal para separação de domínios
-- Boas práticas embutidas: testes, validação, interceptors, pipes
+- Boas práticas embutidas: testes, validação, pipes
 - Escalabilidade e um desenvolvimento consistente
 ---
 
@@ -82,7 +82,7 @@ docker/
 docker-compose up --build
 
 # Acessar Prisma Studio
-http://localhost:3333
+http://localhost:3000
 
 # Executar comandos dentro do app
 docker exec -it backend-container-name bash
